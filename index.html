@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مغامرة العلوم | تصنيف المخلوقات الحية والنباتات</title>
+<style>
+:root{--bg:#eef7f1;--card:#fff;--text:#17352a;--muted:#66756f;--accent:#16845b;--accent2:#0e6a49;--good:#198754;--bad:#c0392b;--gold:#d89b16}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#eaf8f0,#f8fbf9);color:var(--text)}
+.wrap{max-width:850px;margin:auto;padding:22px 15px 40px}.hero{background:linear-gradient(135deg,#126b4b,#1e9b6b);color:white;border-radius:24px;padding:25px;text-align:center;box-shadow:0 12px 30px #155b3b22}.hero h1{margin:0 0 8px;font-size:clamp(24px,5vw,38px)}.hero p{margin:0;opacity:.92}
+.card{background:var(--card);border:1px solid #dce9e2;border-radius:20px;padding:22px;margin-top:18px;box-shadow:0 8px 22px #183c2a0d}.top{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}.pill{background:#edf7f2;border-radius:999px;padding:9px 14px;font-weight:700}.hearts{font-size:23px;letter-spacing:2px}.progress{height:10px;background:#e7eee9;border-radius:20px;overflow:hidden;margin:15px 0}.bar{height:100%;background:var(--accent);width:0;transition:.3s}
+label{display:block;font-weight:700;margin-bottom:8px}input{width:100%;padding:14px 15px;border:2px solid #d8e5de;border-radius:13px;font-size:16px;outline:none}input:focus{border-color:var(--accent)}
+button{border:0;border-radius:14px;padding:13px 18px;font-size:16px;font-weight:700;cursor:pointer;min-height:48px}.primary{background:var(--accent);color:#fff}.primary:hover{background:var(--accent2)}.secondary{background:#edf4f0;color:var(--text)}.options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.option{text-align:right;background:#f7faf8;border:2px solid #dce8e1;color:var(--text);transition:.15s}.option:hover{border-color:#7bb99f;transform:translateY(-1px)}.option.correct{background:#e8f7ee;border-color:var(--good);color:#12633e}.option.wrong{background:#fff0ee;border-color:var(--bad);color:#8f261c}.option:disabled{cursor:default;transform:none}.feedback{margin-top:16px;padding:14px;border-radius:13px;font-weight:700;display:none}.feedback.good{display:block;background:#eaf8ef;color:#16653e}.feedback.bad{display:block;background:#fff1ef;color:#922d24}
+.center{text-align:center}.score{font-size:42px;font-weight:800;color:var(--accent);margin:5px}.certificate{border:10px double #d7b35a;background:#fffdf6;padding:30px 22px;text-align:center;margin-top:20px;border-radius:10px}.certificate h2{font-size:32px;margin:5px;color:#9b7113}.certificate .name{font-size:28px;font-weight:800;margin:18px}.certificate .topic{font-size:18px}.certificate .date{color:#6b6b6b;margin-top:20px}.hidden{display:none!important}.small{color:var(--muted);font-size:14px}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+@media(max-width:600px){.options{grid-template-columns:1fr}.card{padding:17px}.hero{padding:21px}.certificate{padding:22px 12px}}
+@media print{body{background:#fff}.hero,.actions,.small,.top,.progress{display:none!important}.card{box-shadow:none;border:0}.certificate{margin:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+<h1>🌱 مغامرة العلوم</h1>
+<p>تصنيف المخلوقات الحية والنباتات — الصف الخامس</p>
+</section>
+
+<section id="start" class="card">
+<h2>👨‍🎓 ابدأ مغامرتك</h2>
+<p>أجب عن 20 سؤالًا من اختيار متعدد. القلوب ❤️ للتشجيع فقط، ولن تنتهي اللعبة مهما أخطأت.</p>
+<label for="studentName">اسم الطالب</label>
+<input id="studentName" maxlength="50" placeholder="اكتب اسمك هنا">
+<div class="actions"><button class="primary" id="startBtn">ابدأ اللعبة 🚀</button></div>
+</section>
+
+<section id="game" class="card hidden">
+<div class="top">
+<div class="pill">السؤال <span id="qNum">1</span> من 20</div>
+<div class="pill">النقاط: <span id="score">0</span> ⭐</div>
+<div class="hearts" id="hearts" aria-label="القلوب">❤️❤️❤️</div>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<h2 id="question"></h2>
+<div class="options" id="options"></div>
+<div id="feedback" class="feedback" aria-live="polite"></div>
+<div class="actions"><button class="primary hidden" id="nextBtn">السؤال التالي ➜</button></div>
+<p class="small center">❤️ القلوب للتحفيز فقط — أكمل جميع الأسئلة للحصول على الشهادة.</p>
+</section>
+
+<section id="result" class="card hidden">
+<div class="center">
+<h2>🎉 أحسنت! أكملت جميع الأسئلة</h2>
+<div class="score" id="finalScore">0 / 20</div>
+<p id="resultText"></p>
+</div>
+<div class="certificate" id="certificate">
+<div>🏆</div>
+<h2>شهادة إنجاز</h2>
+<p>تشهد هذه الشهادة بأن الطالب/ـة</p>
+<div class="name" id="certName"></div>
+<p class="topic">قد أتم بنجاح لعبة العلوم التفاعلية<br><strong>تصنيف المخلوقات الحية والنباتات</strong></p>
+<p>وأكمل جميع الأسئلة العشرين.</p>
+<div class="date" id="certDate"></div>
+</div>
+<div class="actions">
+<button class="primary" id="printBtn">🖨️ طباعة / حفظ الشهادة PDF</button>
+<button class="secondary" id="restartBtn">🔄 إعادة اللعب</button>
+</div>
+</section>
+</div>
+
+<script>
+(() => {
+const questions = [
+["أي مما يأتي يمثل إحدى الممالك التي تصنف إليها المخلوقات الحية؟",["المملكة الحيوانية","مملكة الصخور","مملكة الماء","مملكة الهواء"],0],
+["أي مملكة تضم المخلوقات التي تصنع غذاءها غالبًا بالبناء الضوئي؟",["النباتات","الحيوانات","الفطريات","البكتيريا فقط"],0],
+["ما الصفة التي تميز النباتات عن الحيوانات غالبًا؟",["تصنع غذاءها بنفسها","تتحرك من مكان لآخر بحثًا عن الغذاء","لا تحتاج إلى الماء","لا تحتوي خلايا"],0],
+["أي مما يأتي من النباتات الوعائية؟",["السرخس","الحزازيات","الطحلب الأخضر البسيط","جميع ما سبق"],0],
+["النباتات اللاوعائية تفتقر إلى:",["أنسجة متخصصة لنقل الماء والغذاء","الخلايا","الماء","الكلوروفيل دائمًا"],0],
+["أي النباتات الآتية من النباتات اللابذرية؟",["السرخس","الصنوبر","الذرة","الفاصوليا"],0],
+["أي النباتات الآتية من النباتات البذرية؟",["الصنوبر","الحزازيات","السرخس","الكبدية"],0],
+["ما الجزء الذي يمتص الماء والأملاح من التربة في معظم النباتات؟",["الجذور","الأزهار","الثمار","البذور"],0],
+["ما وظيفة الأوراق الأساسية؟",["صنع الغذاء بالبناء الضوئي","امتصاص الأملاح من التربة","تثبيت النبات في التربة فقط","إنتاج البذور دائمًا"],0],
+["أي مما يأتي مثال على نبات زهري؟",["الورد","السرخس","الحزازيات","الصنوبر"],0],
+["إلى أي مجموعة ينتمي الإنسان؟",["الحيوانات","النباتات","الفطريات","الطلائعيات"],0],
+["أي مما يأتي من صفات الفطريات؟",["لا تصنع غذاءها بنفسها وتمتص الغذاء من مصادرها","تصنع غذاءها بالبناء الضوئي دائمًا","لها جذور حقيقية دائمًا","تتحرك مثل الحيوانات"],0],
+["لماذا يصنف العلماء المخلوقات الحية في مجموعات؟",["لتسهيل دراستها والتعرف عليها","لتغيير صفاتها","لمنعها من التكاثر","لجعلها كلها متشابهة"],0],
+["أي خاصية تساعد العلماء على تصنيف المخلوقات الحية؟",["الصفات المشتركة","لون السماء","درجة حرارة الجو فقط","مكان وجود الصخور"],0],
+["أي مما يأتي مثال على نبات معرّى البذور؟",["الصنوبر","التفاح","القمح","الفراولة"],0],
+["أين تتكون البذور في النباتات مغطاة البذور؟",["داخل الثمرة","داخل الجذر","داخل الساق فقط","داخل التربة قبل الإزهار"],0],
+["أي جزء من النبات يدعم الأوراق ويحملها؟",["الساق","الجذر","الثمرة","البذرة"],0],
+["ما العملية التي تستخدم فيها النباتات ضوء الشمس لصنع الغذاء؟",["البناء الضوئي","الهضم","التنفس فقط","التكاثر فقط"],0],
+["أي عبارة صحيحة عن المخلوقات الحية؟",["تتكون من خلايا وتقوم بعمليات حيوية","لا تحتاج إلى طاقة","لا تتكاثر","كلها تتحرك من مكانها"],0],
+["أي تسلسل يمثل تصنيفًا مناسبًا للنباتات؟",["وعائية ولاوعائية، ثم بذرية ولابذرية","حيوانات وفطريات فقط","صخور ومعادن وماء","طيور وأسماك وثدييات فقط"],0]
+];
+
+let index=0, score=0, hearts=3, answered=false, student="";
+const $=id=>document.getElementById(id);
+function shuffle(arr){return arr.map(v=>({v,r:Math.random()})).sort((a,b)=>a.r-b.r).map(x=>x.v)}
+function render(){
+  answered=false;
+  const q=questions[index];
+  $("qNum").textContent=index+1;
+  $("score").textContent=score;
+  $("bar").style.width=((index)/20*100)+"%";
+  $("question").textContent=q[0];
+  $("feedback").className="feedback";
+  $("feedback").textContent="";
+  $("nextBtn").classList.add("hidden");
+  const opts=$("options"); opts.innerHTML="";
+  const choices=q[1].map((text,i)=>({text,correct:i===q[2]}));
+  shuffle(choices).forEach(c=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="option"; b.textContent=c.text;
+    b.dataset.correct=c.correct;
+    b.addEventListener("click",()=>answer(b,c.correct));
+    opts.appendChild(b);
+  });
+  $("hearts").textContent="❤️".repeat(hearts)+"🖤".repeat(3-hearts);
+}
+function answer(btn,correct){
+  if(answered)return;
+  answered=true;
+  document.querySelectorAll(".option").forEach(b=>b.disabled=true);
+  if(correct){
+    score++;
+    btn.classList.add("correct");
+    $("feedback").className="feedback good";
+    $("feedback").textContent="🎉 إجابة رائعة! استمر يا بطل.";
+  }else{
+    btn.classList.add("wrong");
+    hearts=Math.max(0,hearts-1);
+    document.querySelectorAll(".option").forEach(b=>{if(b.dataset.correct==="true")b.classList.add("correct")});
+    $("feedback").className="feedback bad";
+    $("feedback").textContent=hearts>0?"💪 ليست مشكلة! حاول التركيز في السؤال التالي.":"🌟 انتهت القلوب التحفيزية، لكن اللعبة مستمرة! أكمل حتى السؤال 20.";
+    $("hearts").textContent="❤️".repeat(hearts)+"🖤".repeat(3-hearts);
+  }
+  $("score").textContent=score;
+  $("nextBtn").classList.remove("hidden");
+}
+function finish(){
+  $("game").classList.add("hidden"); $("result").classList.remove("hidden");
+  $("finalScore").textContent=score+" / 20";
+  $("resultText").textContent=score>=18?"ممتاز جدًا! 🌟":score>=14?"أداء رائع! 👏":"أحسنت على إكمال التحدي! 💪";
+  $("certName").textContent=student;
+  $("certDate").textContent="التاريخ: "+new Intl.DateTimeFormat("ar-SA",{dateStyle:"long"}).format(new Date());
+}
+$("startBtn").addEventListener("click",()=>{
+  student=$("studentName").value.trim();
+  if(!student){$("studentName").focus();$("studentName").style.borderColor="#c0392b";return}
+  $("studentName").style.borderColor="";
+  index=0;score=0;hearts=3;
+  $("start").classList.add("hidden");$("result").classList.add("hidden");$("game").classList.remove("hidden");render();
+});
+$("nextBtn").addEventListener("click",()=>{if(index<19){index++;render()}else finish()});
+$("printBtn").addEventListener("click",()=>window.print());
+$("restartBtn").addEventListener("click",()=>{ $("result").classList.add("hidden");$("start").classList.remove("hidden");$("studentName").value=student; });
+})();
+</script>
+</body>
+</html>
